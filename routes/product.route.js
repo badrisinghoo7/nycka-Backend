@@ -50,10 +50,11 @@ productRouter.get("/:id", async (req, res) => {
 productRouter.patch("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await ProductModel.findByIdAndUpdate(id);
+    const product = await ProductModel.findOne({ _id: id });
     if (!product) {
       res.status(204).json({ error: "no products found" });
     } else {
+      await ProductModel.findByIdAndUpdate({ _id: id });
       res
         .status(204)
         .send({ product, message: "product updated successfully" });
@@ -69,10 +70,12 @@ productRouter.patch("/:id", async (req, res) => {
 productRouter.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await ProductModel.findByIdAndDelete(id);
+    const product = await ProductModel.findOne({ _id: id });
     if (!product) {
       res.status(202).json({ error: "no products found" });
     } else {
+      await ProductModel.findByIdAndDelete({ _id: id });
+
       res
         .status(202)
         .send({ product, message: "product deleted successfully" });
